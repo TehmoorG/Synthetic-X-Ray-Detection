@@ -79,7 +79,19 @@ Modify this README file to include the answers to the questions below.
 If I asked you to do the first coursework again, but now I gave you 5 days and 500 compute units (instead of 100 compute units), what would you do differently to improve your results. In this case, you would be able to use any architecture we have seen in class. Justify your answers well, and do not go over the word limit. You can use bullet points and a maximum of one diagram/figure/table to support your answer.
 
 ###ANSWER to question 1:
-*your answer here*
+I would focus on the following: 
+
+Experiment with Advanced Architectures:
+- Explore GANs for their strength in generating realistic images.
+- Utilize diffusion models, known for producing high-fidelity and detailed images. 
+These models can become very complex and require far more time and power.
+
+Hyperparameter Optimization:
+- Tune a wide range of hyperparameters, focusing on key aspects like the number of convolutional layers.
+- Experiment with a broader scope of values for each parameter to optimize model performance.
+
+Data Augmentation:
+- Use advanced data augmentation techniques to enhance the dataset, ensuring diversity and better representation which would train the model to be more robust.
 
 <br>
 
@@ -92,7 +104,8 @@ Additionally to the newly defined hypotethical assessment in **Question 1**, if 
 Which one would you choose and why? Again justify your answers and use bullet points or tables as you see fit.
 
 ###ANSWER to question 2:
-*your answer here*
+I would choose option A.
+The image resolution becomes a far more important of a consideration so compute power is crucial to process this complex data. Unlimited compute power will allow for far more sophisticated compute models. The limitation of having 10000 images wont be too important consideirng that I could use dat augmentation techniques to expand the dataset and prioritising a higher quality dataset is much better tham having a larger amount of less informative images for training. There will also be a cutoff point where the number of images wont matter as the compute units wont be enough to process it so we would get diminishing returns from this choice. Ultimately having unlimited compute units and 10000 detailed images is far more likely to be beneficial than having unlimted poorer quality images.
 
 
 
