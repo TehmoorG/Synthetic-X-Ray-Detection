@@ -1,3 +1,5 @@
 .DS_Store
 # ignore data folder
 data/
+src/__pycache__/utils.cpython-311.pyc
+__pycache__/
