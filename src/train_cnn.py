@@ -1,3 +1,5 @@
+import torch
+
 def train(model, device, train_loader, optimizer, criterion , epoch):
     model.train()
     train_loss = 0

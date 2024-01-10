@@ -1,9 +1,14 @@
-from torch.utils.data import Dataset, DataLoader, default_collate
+from torch.utils.data import Dataset, default_collate
 from PIL import Image, UnidentifiedImageError
+import os
+import torch
 
-class CustomHandDataset(Dataset):
-    def __init__(self, image_paths, labels, transform=None):
-        self.image_paths = image_paths
+class HandDataset(Dataset):
+    def __init__(self, image_paths_or_dir, labels=None, transform=None):
+        if isinstance(image_paths_or_dir, list):
+            self.image_paths = image_paths_or_dir
+        else:
+            self.image_paths = [os.path.join(image_paths_or_dir, img) for img in os.listdir(image_paths_or_dir) if img.endswith('.jpeg')]
         self.labels = labels
         self.transform = transform
 
@@ -12,42 +17,25 @@ class CustomHandDataset(Dataset):
 
     def __getitem__(self, idx):
         img_path = self.image_paths[idx]
-        label = self.labels[idx]
         try:
-            image = Image.open(img_path).convert('L')  # Convert to grayscale
+            image = Image.open(img_path).convert('L')
             if self.transform:
                 image = self.transform(image)
         except UnidentifiedImageError:
-            # print(f"UnidentifiedImageError: cannot identify image file {img_path}. It will be skipped.")
-            return None, None
-        return image, label
-
+            # Handle error: Log and continue
+            return None, None if self.labels else img_path
+        if self.labels:
+            label = self.labels[idx]
+            return image, label
+        return image, os.path.basename(img_path)
+    
 def custom_collate_fn(batch):
-    batch = [x for x in batch if x[0] is not None]
-    return default_collate(batch)
-
-class testDataset(Dataset):
-    def __init__(self, image_dir, transform=None):
-        self.image_dir = image_dir
-        self.transform = transform
-        self.image_paths = [os.path.join(image_dir, img) for img in os.listdir(image_dir) if img.endswith('.jpeg')]
-
-    def __len__(self):
-        return len(self.image_paths)
-
-    def __getitem__(self, idx):
-        img_path = self.image_paths[idx]
-        try:
-            image = Image.open(img_path).convert('L')  # Convert to grayscale
-            if self.transform:
-                image = self.transform(image)
-        except UnidentifiedImageError:
-            return None, img_path  # Return None and image path if error occurs
-        return image, os.path.basename(img_path)  # Return image and file name
-
-def custom_collate_hands(batch):
     # Filter out pairs where the image is None (corrupted files)
-    batch = [data for data in batch if data[0] is not None]
-    if len(batch) == 0:  # If all images in the batch are corrupt, return an empty batch
+    filtered_batch = [data for data in batch if data[0] is not None]
+
+    # If all images in the batch are corrupt, return an empty batch
+    if len(filtered_batch) == 0:
         return torch.tensor([]), []
-    return torch.utils.data.dataloader.default_collate(batch)
+
+    return default_collate(filtered_batch)
+
