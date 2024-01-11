@@ -1,0 +1,9 @@
+numpy
+matplotlib
+Pillow
+tqdm
+torch
+torchvision
+scikit-learn
+livelossplot
+seaborn
