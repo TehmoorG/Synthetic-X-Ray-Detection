@@ -1,5 +1,8 @@
 .DS_Store
 # ignore data folder
-data/
+data/GAN_hands
+data/real_hands
+data/test_hands
+data/VAE_hands
 src/__pycache__/utils.cpython-311.pyc
 __pycache__/
