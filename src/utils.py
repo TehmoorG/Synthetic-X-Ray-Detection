@@ -5,6 +5,7 @@ from sklearn.metrics import confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
 
+
 def plot_confusion_matrix(model, device, test_loader):
     model.eval()
     y_true = []
@@ -13,17 +14,29 @@ def plot_confusion_matrix(model, device, test_loader):
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
             output = model(data)
-            pred = output.argmax(dim=1, keepdim=True)  # Get the index of the max log-probability
+            pred = output.argmax(
+                dim=1, keepdim=True
+            )  # Get the index of the max log-probability
             y_true.extend(target.view_as(pred).cpu().numpy())
             y_pred.extend(pred.cpu().numpy())
-    
-    class_names = ['Real', 'VAE', 'GANs']
-    cm = confusion_matrix(y_true, y_pred, normalize='true')  # Normalized confusion matrix
-    ax = sns.heatmap(cm, annot=True, fmt='.2f', cmap='Blues', xticklabels=class_names, yticklabels=class_names)
-    ax.set_xlabel('Predicted labels')
-    ax.set_ylabel('True labels')
-    ax.set_title('Normalized Confusion Matrix')
+
+    class_names = ["Real", "VAE", "GANs"]
+    cm = confusion_matrix(
+        y_true, y_pred, normalize="true"
+    )  # Normalized confusion matrix
+    ax = sns.heatmap(
+        cm,
+        annot=True,
+        fmt=".2f",
+        cmap="Blues",
+        xticklabels=class_names,
+        yticklabels=class_names,
+    )
+    ax.set_xlabel("Predicted labels")
+    ax.set_ylabel("True labels")
+    ax.set_title("Normalized Confusion Matrix")
     plt.show()
+
 
 # Function to set up the device
 def set_device(device="cpu", idx=0):
@@ -60,6 +73,7 @@ def set_device(device="cpu", idx=0):
             print("No GPU available! Running on CPU")
     return device
 
+
 def set_seed(seed):
     """
     Sets a fixed value for all random seeds for reproducibility.
@@ -76,6 +90,6 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
 
     torch.backends.cudnn.benchmark = False
-    torch.backends.cudnn.enabled   = False
+    torch.backends.cudnn.enabled = False
 
     return True

@@ -1,9 +1,10 @@
 import torch
 
-def train(model, device, train_loader, optimizer, criterion , epoch):
+
+def train(model, device, train_loader, optimizer, criterion, epoch):
     model.train()
     train_loss = 0
-    for (data, target) in train_loader:
+    for data, target in train_loader:
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
         output = model(data)
@@ -11,10 +12,11 @@ def train(model, device, train_loader, optimizer, criterion , epoch):
         loss.backward()
         train_loss += loss.item()
         optimizer.step()
-        
+
     train_loss /= len(train_loader)
-    print(f'Epoch: {epoch:02d}, Train Loss: {train_loss:.4f}')
+    print(f"Epoch: {epoch:02d}, Train Loss: {train_loss:.4f}")
     return train_loss
+
 
 def validate(model, device, test_loader, criterion):
     model.eval()
@@ -29,6 +31,6 @@ def validate(model, device, test_loader, criterion):
             correct += pred.eq(target.view_as(pred)).sum().item()
 
     test_loss /= len(test_loader)
-    accuracy = 100. * correct / len(test_loader.dataset)
-    print(f'Validation Loss: {test_loss:.4f}, Accuracy: {accuracy:.2f}%')
+    accuracy = 100.0 * correct / len(test_loader.dataset)
+    print(f"Validation Loss: {test_loss:.4f}, Accuracy: {accuracy:.2f}%")
     return test_loss, accuracy
